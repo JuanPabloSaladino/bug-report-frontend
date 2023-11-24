@@ -10,6 +10,7 @@ import * as React from 'react'
 import { ModificacionBug } from '../ModificacionBug/ModificacionBug'
 import { AltaBug } from '../AltaBug/AltaBug'
 import { IBug } from '../../types'
+import { BugAPI } from '../../api/bug-api'
 
 export interface Props {
   rows: IBug[]
@@ -28,8 +29,12 @@ export const Table: React.FC<Props> = ({ rows }) => {
   }
 
   const handleDelete = (bugId: string) => {
-    // TODO: Llamar endpoint con método HTTP DELETE
+    // TODO: Ver porque esta defasado el ID
     console.log('handleDelete ', bugId)
+
+    BugAPI
+        .deleteBug(bugId)
+        .then((message: string) => console.log(message))
   }
 
   return (

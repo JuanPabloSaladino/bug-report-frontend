@@ -13,6 +13,7 @@ import { IFormInitialValues, Props } from './alta-modificacion-bug'
 import { initialValues, style } from './AltaModificacionBug.constants'
 import { Stack, styled } from '@mui/system'
 import { IBug } from '../../types'
+import { BugAPI } from '../../api/bug-api'
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   width: 62,
@@ -85,8 +86,19 @@ export const AltaModificacionBug: React.FC<Props> = ({
     handleSubmit(bug)
   }
 
-  const handleToggleFix = (bugId: string) => {
+  const handleToggleFix = async (bugId: string) => {
     console.log('handleToggleFix ', bugId)
+
+    const bugToUpdate = await BugAPI
+                                .getBugById(bugId)
+
+    if(bugToUpdate) {
+        BugAPI
+            .updateBug(bugId, bugToUpdate)
+            .then((updatedBug) => console.log('bugActualizado',updatedBug))
+    }
+
+
   }
 
   useEffect(() => {
@@ -95,7 +107,7 @@ export const AltaModificacionBug: React.FC<Props> = ({
   }, [initialFormValues])
 
   useEffect(() => {
-    console.log(formik.values)
+    //console.log(formik.values)
   }, [formik.values])
 
   return (

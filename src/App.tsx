@@ -1,14 +1,14 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { IBug, IIdFixed } from './types'
+import { BugAPI } from './api/bug-api'
 
 import * as React from 'react'
 
 import { Table } from './components/Table/Table'
 import dayjs from 'dayjs'
-import { mockBugs } from './mock/mock.constants'
 
 const App: React.FC = () => {
-  const [bugs, setBugs] = useState(mockBugs)
+  const [bugs, setBugs] = useState<IBug[]>([])
 
   const handleRemove = (id: string): void => {
     // TODO: Luego hacer una llamada a metodo deleteBug
@@ -32,7 +32,13 @@ const App: React.FC = () => {
     setBugs(newBugs)
   }
 
-  // TODO: useEffect para traer los bugs desde API
+  useEffect(()=>{
+    BugAPI
+        .getBugs()
+        .then((bugs: IBug[]) => {
+            setBugs(bugs)
+        })
+  }, [])
 
   const handleAddBug = (title: string): void => {
     const newBug: IBug = {

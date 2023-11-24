@@ -11,7 +11,9 @@ export const ModificacionBug: React.FC<Props> = ({
                                                  }) => {
   const [initialFormValues, setInitialFormValues] = useState<IFormInitialValues>({} as IFormInitialValues)
 
-  const handleUpdate = () => {
+  const handleUpdate = (bug: IBug) => {
+    console.log('handleUpdate')
+    console.log(bug)
     /*
     * TODO:
     *  - Llamada a API (Método HTTP PUT) para hacer un UPDATE del Bug pasándole:
