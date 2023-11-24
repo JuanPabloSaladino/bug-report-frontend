@@ -21,3 +21,12 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Ignorar el archivo de entorno
+.env
+
+# Ignorar la carpeta de configuración de IntelliJ IDEA
+.idea/
+
+# Ignorar el archivo de bloqueo de paquetes para proyectos de Node.js
+package-lock.json
