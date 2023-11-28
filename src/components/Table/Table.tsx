@@ -64,8 +64,8 @@ export const Table: React.FC<Props> = ({ rows }) => {
       })
   }
 
-  const handleCloseButton = () => {
-    getBugs()
+  const handleCloseButton = async () => {
+    await getBugs()
     setSelectedIdRow('')
   }
 
@@ -82,7 +82,7 @@ export const Table: React.FC<Props> = ({ rows }) => {
             <TableButton
                 color="success"
                 modal={ AltaBug }
-                onClose={ () => handleCloseButton() }
+                onClose={ handleCloseButton }
             >
               <AddCircleIcon color="success"/>
             </TableButton>
@@ -91,7 +91,7 @@ export const Table: React.FC<Props> = ({ rows }) => {
             <TableButton
                 color="warning"
                 disabled={ !selectedIdRow }
-                onClose={ () => handleCloseButton() }
+                onClose={ handleCloseButton }
                 modal={ ModificacionBug }
                 selectedIdRow={ selectedIdRow }
             >

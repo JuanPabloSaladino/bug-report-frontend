@@ -14,22 +14,21 @@ import { ErrorMessages } from './messages/messages'
 
 const App: React.FC = () => {
   const [bugs, setBugs] = useState<IBug[]>([])
-  const [loading, setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(true)
 
   const { showSnackbar } = useSnackbar()
 
   useEffect(()=>{
-    setLoading(true)
     BugAPI
         .getBugs()
         .then((bugs: IBug[]) => {
           setBugs(bugs)
-          setLoading(false)
         })
         .catch(error => {
           showSnackbar(ErrorMessages.GetBugs, AlertSeverity.Error)
           setBugs([])
         })
+        .finally(() => setLoading(false))
   }, [])
 
   return (
