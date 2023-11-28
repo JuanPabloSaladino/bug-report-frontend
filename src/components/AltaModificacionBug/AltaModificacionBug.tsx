@@ -15,6 +15,7 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AltaModificacionValidations } from '../../validations/AltaModificacion.validations'
 
 export const AltaModificacionBug: React.FC<Props> = ({
                                                        handleCloseDialog,
@@ -28,6 +29,7 @@ export const AltaModificacionBug: React.FC<Props> = ({
   const formikProps: FormikConfig<IFormInitialValues> = {
     enableReinitialize: true,
     initialValues: { ...initialValues, ...initialFormValues },
+    validationSchema: AltaModificacionValidations,
     onSubmit: async (values: IFormInitialValues) => {
       handleSubmitData(values)
       handleCloseDialog()
@@ -68,7 +70,9 @@ export const AltaModificacionBug: React.FC<Props> = ({
               <DialogContent sx={ style }>
                 <TextField
                     autoComplete="off"
+                    error={ !!formik.errors.title }
                     fullWidth
+                    helperText={ formik.errors.title }
                     label="Título"
                     name="title"
                     margin="none"
@@ -77,8 +81,10 @@ export const AltaModificacionBug: React.FC<Props> = ({
                     value={ formik.values.title }
                 />
                 <TextField
+                    error={ !!formik.errors.description }
                     fullWidth
                     label="Descripción"
+                    helperText={ formik.errors.description }
                     name="description"
                     margin="dense"
                     multiline
@@ -93,12 +99,19 @@ export const AltaModificacionBug: React.FC<Props> = ({
                   <LocalizationProvider dateAdapter={ AdapterDayjs }>
                     <DemoContainer components={['DatePicker']}>
                       <DatePicker
+                        disableFuture
                         label="Fecha de creación"
                         onChange={(date) => {
                           formik.setFieldValue('createdAt', date);
                         }}
                         sx={{ width: '100%' }}
                         value={ dayjs(formik.values.createdAt) }
+                        slotProps={{
+                          textField: {
+                            error: !!formik.errors.createdAt,
+                            helperText: formik.errors.createdAt
+                          }
+                        }}
                         />
                     </DemoContainer>
                   </LocalizationProvider>

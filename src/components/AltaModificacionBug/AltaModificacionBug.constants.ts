@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import { IFormInitialValues } from './alta-modificacion-bug'
 
 export const initialValues: IFormInitialValues = {
@@ -6,7 +7,7 @@ export const initialValues: IFormInitialValues = {
   fixed: false,
   description: '',
   closedAt: null,
-  createdAt: null
+  createdAt: dayjs()
 }
 
 export const style = {

@@ -13,6 +13,7 @@ import { IBug } from '../../types'
 import { BugAPI } from '../../api/bug-api'
 import { useSnackbar } from '../../context/SnackbarContext'
 import { AlertSeverity } from '../../context/SnackbarContext.constants'
+import { ErrorMessages } from '../../messages/messages'
 
 export interface Props {
   rows: IBug[]
@@ -43,7 +44,7 @@ export const Table: React.FC<Props> = ({ rows }) => {
         setLoading(false)
       })
       .catch((error) => {
-        showSnackbar(error, AlertSeverity.Error)
+        showSnackbar(ErrorMessages.DeleteBug, AlertSeverity.Error)
         setLoading(false)
       })
   }
@@ -116,10 +117,10 @@ export const Table: React.FC<Props> = ({ rows }) => {
             columns={ columns }
             initialState={ {
               pagination: {
-                paginationModel: { page: 0, pageSize: 5 }
+                paginationModel: { page: 0, pageSize: 10 }
               }
             } }
-            pageSizeOptions={[5, 10, 25]}
+            pageSizeOptions={[10]}
             onRowSelectionModelChange={ handleSelectionModelChange }
             loading={ loading }
             localeText={ {

@@ -8,17 +8,27 @@ import * as React from 'react'
 
 import { Table } from './components/Table/Table'
 import { Typography } from '@mui/material'
+import { useSnackbar } from './context/SnackbarContext'
+import { AlertSeverity } from './context/SnackbarContext.constants'
+import { ErrorMessages } from './messages/messages'
 
 const App: React.FC = () => {
   const [bugs, setBugs] = useState<IBug[]>([])
-  const [loading, setLoading] = useState<boolean>(true)
+  const [loading, setLoading] = useState<boolean>(false)
+
+  const { showSnackbar } = useSnackbar()
 
   useEffect(()=>{
+    setLoading(true)
     BugAPI
         .getBugs()
         .then((bugs: IBug[]) => {
-            setBugs(bugs)
-            setLoading(false)
+          setBugs(bugs)
+          setLoading(false)
+        })
+        .catch(error => {
+          showSnackbar(ErrorMessages.GetBugs, AlertSeverity.Error)
+          setBugs([])
         })
   }, [])
 
@@ -46,7 +56,7 @@ const App: React.FC = () => {
               </Box>
             )
             : (
-              <Table rows={bugs} />
+            <Table rows={ bugs } />
             )
         }
       </>
