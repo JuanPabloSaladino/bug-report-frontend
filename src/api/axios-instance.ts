@@ -1,10 +1,7 @@
 import axios, { AxiosResponse } from 'axios'
-import dotenv from 'dotenv'
-
-dotenv.config()
 
 const instance = axios.create({
-    baseURL: process.env.PUBLIC_API_REST_URL
+    baseURL: process.env.REACT_APP_BASE_URL
 })
 
 instance.interceptors.response.use(
@@ -14,3 +11,5 @@ instance.interceptors.response.use(
         throw error
     }
 )
+
+export default instance

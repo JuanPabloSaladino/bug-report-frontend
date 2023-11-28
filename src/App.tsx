@@ -1,71 +1,54 @@
 import { useState, useEffect } from 'react'
-import { IBug, IIdFixed } from './types'
+import { IBug } from './types'
 import { BugAPI } from './api/bug-api'
+import Box from '@mui/material/Box'
+import CircularProgress from '@mui/material/CircularProgress'
 
 import * as React from 'react'
 
 import { Table } from './components/Table/Table'
-import dayjs from 'dayjs'
+import { Typography } from '@mui/material'
 
 const App: React.FC = () => {
   const [bugs, setBugs] = useState<IBug[]>([])
-
-  const handleRemove = (id: string): void => {
-    // TODO: Luego hacer una llamada a metodo deleteBug
-    const newBugs: IBug[] = bugs.filter(bug => bug.id !== id)
-    setBugs(newBugs)
-  }
-
-  const handleFixed = ({ id, fixed }: IIdFixed): void => {
-    // TODO: Luego hacer una llamada a metodo de API?
-    const newBugs = bugs.map((bug: IBug) => {
-      if (bug.id === id) {
-        return {
-          ...bug,
-          fixed
-        }
-      }
-
-      return bug
-    })
-
-    setBugs(newBugs)
-  }
+  const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(()=>{
     BugAPI
         .getBugs()
         .then((bugs: IBug[]) => {
             setBugs(bugs)
+            setLoading(false)
         })
   }, [])
 
-  const handleAddBug = (title: string): void => {
-    const newBug: IBug = {
-      id: crypto.randomUUID(),
-      closedAt: null,
-      createdAt: dayjs(),
-      description: '',
-      title,
-      fixed: false
-    }
-
-    const newBugs = [...bugs, newBug]
-    setBugs(newBugs)
-  }
-
   return (
       <>
-        <h2>Bug Report</h2>
-        {/* <Bugs
-        bugs={ bugs }
-        onRemoveBug={ handleRemove }
-        onToggleFixed={ handleFixed }
-      />
-      <Header onAddBug={ handleAddBug }/> */ }
-        <Table
-            rows={ bugs }
-        />
+        <Typography
+          align='center'
+          variant='h4'
+          marginY={ 2 }
+        >
+          Bug Report
+        </Typography>
+        {
+          loading
+            ? (
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  minHeight: '100vh'
+                }}
+              >
+                <CircularProgress />
+              </Box>
+            )
+            : (
+              <Table rows={bugs} />
+            )
+        }
       </>
   )
 }

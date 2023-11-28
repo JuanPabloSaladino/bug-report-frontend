@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import { AltaModificacionBug } from '../AltaModificacionBug/AltaModificacionBug'
 import { IFormInitialValues, Props } from './modificacion-bug'
-import { mockBugs } from '../../mock/mock.constants'
 import { IBug } from '../../types'
+import { BugAPI } from '../../api/bug-api'
+import { useSnackbar } from '../../context/SnackbarContext'
+import { AlertSeverity } from '../../context/SnackbarContext.constants'
 
 export const ModificacionBug: React.FC<Props> = ({
                                                    handleCloseDialog,
@@ -11,37 +13,24 @@ export const ModificacionBug: React.FC<Props> = ({
                                                  }) => {
   const [initialFormValues, setInitialFormValues] = useState<IFormInitialValues>({} as IFormInitialValues)
 
-  const handleUpdate = (bug: IBug) => {
-    console.log('handleUpdate')
-    console.log(bug)
-    /*
-    * TODO:
-    *  - Llamada a API (Método HTTP PUT) para hacer un UPDATE del Bug pasándole:
-  *     - ID
-  *     - Bug
-    * */
-  }
+  const { showSnackbar } = useSnackbar()
 
-  const getBugById = (bugId: string): IBug | undefined => {
-    return mockBugs.find(bug => bug.id == bugId)
+  const handleUpdate = (bug: IBug) => {
+    BugAPI
+      .updateBug(bug.id, bug)
+      .then(response => showSnackbar('El bug se ha actualizado exitosamente', AlertSeverity.Success))
+      .catch((error) => {
+        showSnackbar(error, AlertSeverity.Error)
+      })
   }
 
   useEffect(() => {
     if (selectedIdRow) {
+      // TODO: Se le podria poner un loading
 
-      /*
-      * TODO:
-      *  - El ID del bug no es el selectedIdRow. Solucionar.
-      *  - Si está el selectedIdRow (ID del bug), pegarle a la API
-      *  (método HTTP GET) para traerme el Bug correspondiente
-      *  - Luego, popular el formulario con esa información
-      * */
-
-      const bug: IBug | undefined = getBugById(selectedIdRow)
-
-      if (bug) {
-        setInitialFormValues(bug)
-      }
+      BugAPI
+        .getBugById(selectedIdRow)
+        .then(bug => setInitialFormValues(bug))
     }
   }, [selectedIdRow])
 
@@ -52,6 +41,7 @@ export const ModificacionBug: React.FC<Props> = ({
           initialFormValues={ initialFormValues }
           openDialog={ openDialog }
           title="Editar Bug"
+          selectedIdRow={ selectedIdRow }
       />
   )
 }

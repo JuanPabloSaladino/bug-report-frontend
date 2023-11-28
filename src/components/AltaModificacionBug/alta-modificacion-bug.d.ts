@@ -17,4 +17,5 @@ export interface Props {
   handleSubmit: (bug: IBug) => void
   openDialog: boolean
   setFieldValue?: (field: string, value) => void
+  selectedIdRow?: string
 }
